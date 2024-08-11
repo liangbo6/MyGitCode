@@ -1,0 +1,70 @@
+source ~/tools/pwndbg/gdbinit.py
+source ~/tools/Pwngdb/pwngdb.py
+source ~/tools/Pwngdb/angelheap/gdbinit.py
+
+
+# show content of address using offset when PIE is enabled
+define sbase
+    if $argc == 1
+        telescope $rebase($arg0) 10
+    end
+
+    if $argc == 2
+        telescope $rebase($arg0) $arg1
+    end
+end
+
+# set breakpoints using offset when PIE is enabled
+define bbase
+    b *$rebase($arg0)
+end
+
+define dq
+    if $argc == 1
+        x /8gx $arg0
+    end
+    if $argc == 2
+        x /$arg1gx $arg0
+    end
+end
+
+define dd
+    if $argc == 1
+        x /16wx $arg0
+    end
+    if $argc == 2
+        x /$arg1wx $arg0
+    end
+end
+
+define dw
+    if $argc == 1
+        x /32hx $arg0
+    end
+    if $argc == 2
+        x /$arg1hx $arg0
+    end
+end
+
+define db
+    if $argc == 1
+        x /64bx $arg0
+    end
+    if $argc == 2
+        x /$arg1bx $arg0
+    end
+end
+
+
+
+
+
+
+
+define hook-run
+python
+import angelheap
+angelheap.init_angelheap()
+end
+end
+
